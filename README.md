@@ -22,6 +22,7 @@ Usage
 ATTENTION: There is some manual work to be done before you can use this plugin!
 
 Android:
+---
 
 1) In edit the following variables to your liking:
 ```
@@ -35,7 +36,7 @@ Android:
     import at.modalog.cordova.plugin.log.CordovaChromeClientLog;
 ```
 
-3) Update your mina.java files to this:
+3) Update your main.java file:
 ```
     // deactivate the regular init
     // super.init();
@@ -47,5 +48,6 @@ Android:
 ```
 
 iOS:
+---
 
 iOS is not yet supported.
