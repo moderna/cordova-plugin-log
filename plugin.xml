@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="at.modalog.cordova.plugin.log"
+    version="1.0.0">
+
+    <name>Log</name>
+    <repo>https://github.com/moderna/cordova-plugin-log.git</repo>
+    <keywords>log,file,cordova,phonegap,android</keywords>
+    <license>MIT</license>
+    <author>Modern Alchemists OG</author>
+    <description>
+      &lt;p&gt;This is a plugin writes all cordova javascript logs into a file in a public folder (Android: sdCard, iOS: ~/Documents).&lt;/p&gt;
+    </description>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Log" >
+                <param name="android-package" value="at.modalog.cordova.plugin.log.CordovaChromeClientLog.java"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/CordovaChromeClientLog.java" target-dir="src/at/modalog/cordova/plugin/log" />
+    </platform>
+
+    <info>
+        ATTENTION: There is some manual work to be done before you can use this plugin!
+
+        Android:
+
+        1) In edit the following variables to your liking:
+
+            private String logDir = ".at.modalog.cordova.plugin.log";
+            private String logFileName = "CordovaChromeClient.log";
+            private double logFileMaxSizeInKiloBytes = 512;
+
+        2) Open your apps main.java file and add this import statement:
+
+            import at.modalog.cordova.plugin.log.CordovaChromeClientLog;
+
+        3) Update your mina.java files to this:
+
+            // deactivate the regular init
+            // super.init();
+
+            // modify init to use "CordovaChromeClientLog"
+            CordovaWebView webView = this.makeWebView();
+            super.init(webView, makeWebViewClient(webView), CordovaChromeClientLog.makeChromeClient(this, webView));
+            // ...
+
+        iOS:
+
+        iOS is not yet supported.
+    </info>
+
+</plugin>
