@@ -30,7 +30,7 @@ public class CordovaChromeClientLog extends CordovaChromeClient
 	private String logDir = ".at.modalog.cordova.plugin.log"; // prepending a dot "." makes the directory invisible
 	private String logFileName = "CordovaChromeClient.log";
 	private File logFile;
-	private double logFileMaxSizeInKiloBytes = 512;
+	private double logFileMaxSizeInKiloBytes = 10;
     private String TAG = "CordovaLog";
     
 	public static CordovaChromeClient makeChromeClient( CordovaActivity cordova, CordovaWebView webView )
