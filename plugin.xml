@@ -10,7 +10,7 @@
     <license>MIT</license>
     <author>Modern Alchemists OG</author>
     <description>
-      &lt;p&gt;This is a plugin writes all cordova javascript logs into a file in a public folder (Android: sdCard, iOS: ~/Documents).&lt;/p&gt;
+      &lt;p&gt;This plugin writes all cordova javascript logs into a file in a public folder (Android: sdCard, iOS: ~/Documents).&lt;/p&gt;
     </description>
 
     <!-- android -->
