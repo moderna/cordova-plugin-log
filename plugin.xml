@@ -51,7 +51,74 @@
 
         iOS:
 
-        iOS is not yet supported.
+        1) Make Sure that the org.apache.cordova.console plugin is added.
+
+        2) Add this to your onDeviceReady JavaScript handler:
+
+
+            // add log and error handlers for iOS
+            if( device.platform == "iOS" )
+            {
+                window.onerror = function( message, url, lineNumber )
+                {
+                    console.log("Error: "+message+" in "+url+" at line "+lineNumber);
+                }
+            }
+
+        3) Add this to your xCode Projects "CDVLogger.h":
+
+            - (void)logToFile:(NSString*)content;
+
+        4) Add this to your xCode Projects "CDVLogger.m" and configure "logDir", "logFileName" and "logFileMaxSizeInKiloBytes":
+
+            - (void)logToFile:(NSString*)content
+            {
+                NSString* logDir = @".at.modalog.cordova.plugin.log";
+                NSString* logFileName = @"CordovaChromeClient.log";
+                unsigned long long logFileMaxSizeInKiloBytes = 512;
+
+                // Get the file path
+                NSString* documentsDirectory = [NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                NSString* filePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/%@", logDir, logFileName]];
+
+                // Create dir if it doesn't exist
+                if(![[NSFileManager defaultManager] fileExistsAtPath:logFileName])
+                {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", logDir]] withIntermediateDirectories:YES attributes:nil error:NULL];
+                }
+
+                // Create file if it doesn't exist
+                if(![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+                {
+                    [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil ];
+                }
+
+                // Append text to file
+                NSFileHandle* file = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+                [file seekToEndOfFile];
+                [file writeData:[content dataUsingEncoding:NSUTF8StringEncoding]];
+
+                NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:NULL];
+                unsigned long long fileSize = [attributes fileSize];
+
+                // Shorten the file to about 1/3 of its size if it´s too big
+                if( fileSize > logFileMaxSizeInKiloBytes * 1024 )
+                {
+                    NSString* fullContent = [NSString stringWithContentsOfFile:filePath
+                    encoding:NSUTF8StringEncoding
+                    error:NULL];
+                    [file truncateFileAtOffset:0];
+                    [file seekToEndOfFile];
+                    [file writeData:[[fullContent substringFromIndex: fileSize * 0.3] dataUsingEncoding:NSUTF8StringEncoding]];
+                }
+
+                // Close file
+                [file closeFile];
+            }
+
+        5) Add this to your xCode Projects "CDVLogger.m" at the end of the - logLevel() method:
+
+            [self logToFile: [NSString stringWithFormat:@"%@: %@\n", level, message]];
     </info>
 
 </plugin>
